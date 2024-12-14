@@ -81,3 +81,107 @@ h2 {
     display: none;
     opacity: 0;
 }
+
+/* 캐릭터 생성 화면 */
+#character-creation {
+    text-align: center;
+    padding: 2rem;
+}
+
+.character-name-section {
+    margin: 2rem 0;
+}
+
+.character-name-section label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.character-name-section input {
+    padding: 0.5rem 1rem;
+    font-size: 1.1rem;
+    border: 2px solid #4a148c;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    width: 300px;
+}
+
+.character-name-section input:focus {
+    outline: none;
+    border-color: #7c43bd;
+    box-shadow: 0 0 10px rgba(124, 67, 189, 0.5);
+}
+
+.class-selection h3 {
+    margin: 2rem 0;
+    color: #add8e6;
+}
+
+.class-cards {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.class-card {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid transparent;
+    border-radius: 15px;
+    padding: 1.5rem;
+    width: 250px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.class-card:hover {
+    transform: translateY(-5px);
+    border-color: #7c43bd;
+    box-shadow: 0 5px 15px rgba(124, 67, 189, 0.3);
+}
+
+.class-card.selected {
+    border-color: #ffd700;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+.class-card h4 {
+    color: #ffd700;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.class-card img {
+    width: 120px;
+    height: 120px;
+    margin: 1rem 0;
+    border-radius: 60px;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.class-card p {
+    margin: 1rem 0;
+    color: #add8e6;
+}
+
+.class-card .stats {
+    list-style: none;
+    text-align: left;
+    margin-top: 1rem;
+}
+
+.class-card .stats li {
+    margin: 0.5rem 0;
+    color: #ffffff;
+}
+
+#create-character {
+    margin-top: 2rem;
+}
+
+#create-character:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

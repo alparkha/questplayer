@@ -18,6 +18,50 @@
             </div>
         </div>
 
+        <div id="character-creation" class="screen hidden">
+            <h2>캐릭터 생성</h2>
+            <div class="character-name-section">
+                <label for="character-name">캐릭터 이름:</label>
+                <input type="text" id="character-name" placeholder="이름을 입력하세요">
+            </div>
+            <div class="class-selection">
+                <h3>직업 선택</h3>
+                <div class="class-cards">
+                    <div class="class-card" data-class="warrior">
+                        <h4>전사</h4>
+                        <img src="assets/warrior.png" alt="전사">
+                        <p>강한 실행력과 높은 집중력을 가진 직업</p>
+                        <ul class="stats">
+                            <li>집중력: ⭐⭐⭐⭐</li>
+                            <li>실행력: ⭐⭐⭐⭐⭐</li>
+                            <li>창의력: ⭐⭐</li>
+                        </ul>
+                    </div>
+                    <div class="class-card" data-class="mage">
+                        <h4>마법사</h4>
+                        <img src="assets/mage.png" alt="마법사">
+                        <p>높은 창의력과 문제해결 능력을 가진 직업</p>
+                        <ul class="stats">
+                            <li>집중력: ⭐⭐⭐</li>
+                            <li>실행력: ⭐⭐</li>
+                            <li>창의력: ⭐⭐⭐⭐⭐</li>
+                        </ul>
+                    </div>
+                    <div class="class-card" data-class="rogue">
+                        <h4>도적</h4>
+                        <img src="assets/rogue.png" alt="도적">
+                        <p>빠른 적응력과 균형잡힌 능력을 가진 직업</p>
+                        <ul class="stats">
+                            <li>집중력: ⭐⭐⭐</li>
+                            <li>실행력: ⭐⭐⭐</li>
+                            <li>창의력: ⭐⭐⭐</li>
+                        </ul>
+                    </div>
+                </div>
+                <button id="create-character" class="menu-button" disabled>캐릭터 생성</button>
+            </div>
+        </div>
+
         <div id="tutorial-screen" class="screen hidden">
             <!-- 튜토리얼 내용은 JavaScript에서 동적으로 추가됨 -->
         </div>
