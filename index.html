@@ -67,7 +67,75 @@
         </div>
 
         <div id="main-screen" class="screen hidden">
-            <!-- 메인 게임 화면 -->
+            <div class="game-header">
+                <div class="character-status">
+                    <div class="character-info">
+                        <h3 class="character-name"></h3>
+                        <div class="character-level">
+                            <span class="level"></span>
+                            <div class="exp-bar">
+                                <div class="exp-fill"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="character-stats">
+                        <div class="stat focus">집중력: <span></span></div>
+                        <div class="stat execution">실행력: <span></span></div>
+                        <div class="stat creativity">창의력: <span></span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quest-board">
+                <div class="quest-controls">
+                    <button id="add-quest-btn" class="menu-button">새로운 퀘스트 +</button>
+                </div>
+                
+                <div class="quest-lists">
+                    <div class="quest-category active-quests">
+                        <h3>진행중인 퀘스트</h3>
+                        <div class="quest-list" id="active-quests"></div>
+                    </div>
+                    <div class="quest-category completed-quests">
+                        <h3>완료된 퀘스트</h3>
+                        <div class="quest-list" id="completed-quests"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 퀘스트 생성 모달 -->
+            <div id="quest-modal" class="modal hidden">
+                <div class="modal-content">
+                    <h2>새로운 퀘스트</h2>
+                    <form id="quest-form">
+                        <div class="form-group">
+                            <label for="quest-title">퀘스트 제목</label>
+                            <input type="text" id="quest-title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="quest-description">퀘스트 설명</label>
+                            <textarea id="quest-description" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="quest-difficulty">난이도</label>
+                            <select id="quest-difficulty" required>
+                                <option value="normal">일반</option>
+                                <option value="rare">레어</option>
+                                <option value="epic">에픽</option>
+                                <option value="legendary">레전더리</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="quest-deadline">마감일</label>
+                            <input type="datetime-local" id="quest-deadline">
+                        </div>
+                        <div class="form-buttons">
+                            <button type="submit" class="menu-button">퀘스트 생성</button>
+                            <button type="button" class="menu-button cancel">취소</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
 
         <div id="settings-screen" class="screen hidden">
