@@ -251,8 +251,31 @@ h2 {
 }
 
 .quest-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 2rem;
-    text-align: right;
+}
+
+.quest-filters {
+    display: flex;
+    gap: 1rem;
+}
+
+.filter-select {
+    padding: 0.5rem 1rem;
+    border: 2px solid #4a148c;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: #7c43bd;
+    box-shadow: 0 0 10px rgba(124, 67, 189, 0.3);
 }
 
 .quest-lists {
@@ -281,6 +304,7 @@ h2 {
     padding: 1rem;
     transition: transform 0.2s;
     cursor: pointer;
+    position: relative;
 }
 
 .quest-card:hover {
@@ -319,6 +343,42 @@ h2 {
 .quest-deadline {
     color: #ff6b6b;
     font-size: 0.8rem;
+}
+
+.quest-card .quest-actions {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    display: flex;
+    gap: 0.5rem;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.quest-card:hover .quest-actions {
+    opacity: 1;
+}
+
+.quest-action-btn {
+    background: none;
+    border: none;
+    color: #add8e6;
+    cursor: pointer;
+    padding: 0.2rem;
+    font-size: 1.2rem;
+    transition: color 0.2s;
+}
+
+.quest-action-btn:hover {
+    color: #ffffff;
+}
+
+.quest-action-btn.edit:hover {
+    color: #ffd700;
+}
+
+.quest-action-btn.delete:hover {
+    color: #ff6b6b;
 }
 
 /* 모달 */
@@ -395,4 +455,12 @@ h2 {
 
 .form-buttons .cancel {
     background: #ff6b6b;
+}
+
+.form-buttons .delete {
+    background: #ff6b6b;
+}
+
+.form-buttons .delete:hover {
+    background: #ff4444;
 }

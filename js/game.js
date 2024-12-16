@@ -242,44 +242,71 @@ class QuestPlayer {
     }
 
     renderQuests() {
-        // 진행중인 퀘스트
-        const activeQuests = this.quests.filter(q => !q.completed);
-        this.activeQuestsList.innerHTML = activeQuests.map(quest => this.createQuestCard(quest)).join('');
+        const activeQuestsList = document.getElementById('active-quests');
+        const completedQuestsList = document.getElementById('completed-quests');
+        
+        // 기존 퀘스트 초기화
+        activeQuestsList.innerHTML = '';
+        completedQuestsList.innerHTML = '';
 
-        // 완료된 퀘스트
-        const completedQuests = this.quests.filter(q => q.completed);
-        this.completedQuestsList.innerHTML = completedQuests.map(quest => this.createQuestCard(quest)).join('');
+        // 퀘스트 필터링
+        let filteredQuests = this.quests.filter(quest => {
+            if (currentFilter === 'all') return true;
+            return quest.difficulty === currentFilter;
+        });
 
-        // 퀘스트 클릭 이벤트 추가
-        document.querySelectorAll('.quest-card').forEach(card => {
-            card.addEventListener('click', () => {
-                const questId = card.dataset.questId;
-                const quest = this.quests.find(q => q.id === questId);
-                if (!quest.completed) {
-                    this.completeQuest(quest);
-                }
-            });
+        // 퀘스트 정렬
+        filteredQuests.sort((a, b) => {
+            switch (currentSort) {
+                case 'deadline':
+                    return new Date(a.deadline) - new Date(b.deadline);
+                case 'created':
+                    return new Date(a.createdAt) - new Date(b.createdAt);
+                case 'difficulty':
+                    const difficultyOrder = { normal: 0, rare: 1, epic: 2, legendary: 3 };
+                    return difficultyOrder[b.difficulty] - difficultyOrder[a.difficulty];
+                default:
+                    return 0;
+            }
+        });
+
+        // 퀘스트 렌더링
+        filteredQuests.forEach(quest => {
+            const questCard = document.createElement('div');
+            questCard.className = `quest-card ${quest.difficulty}`;
+            questCard.innerHTML = `
+                <div class="quest-actions">
+                    <button class="quest-action-btn edit" onclick="editQuest('${quest.id}')">✎</button>
+                    <button class="quest-action-btn delete" onclick="deleteQuest('${quest.id}')">×</button>
+                </div>
+                <h3>${quest.title}</h3>
+                <p>${quest.description}</p>
+                <div class="quest-info">
+                    <span class="difficulty ${quest.difficulty}">${quest.difficulty}</span>
+                    <span class="deadline">마감: ${formatDate(quest.deadline)}</span>
+                </div>
+                ${!quest.completed ? `<button onclick="completeQuest('${quest.id}')" class="complete-btn">완료</button>` : ''}
+            `;
+
+            if (quest.completed) {
+                completedQuestsList.appendChild(questCard);
+            } else {
+                activeQuestsList.appendChild(questCard);
+            }
         });
     }
 
-    createQuestCard(quest) {
-        return `
-            <div class="quest-card ${quest.difficulty}" data-quest-id="${quest.id}">
-                <div class="quest-title">${quest.title}</div>
-                <div class="quest-description">${quest.description}</div>
-                ${quest.deadline ? `<div class="quest-deadline">마감: ${new Date(quest.deadline).toLocaleString()}</div>` : ''}
-            </div>
-        `;
-    }
-
-    completeQuest(quest) {
+    completeQuest(questId) {
         if (confirm('퀘스트를 완료하시겠습니까?')) {
-            quest.completed = true;
-            quest.completedAt = new Date();
-            this.applyQuestRewards(quest);
+            const questIndex = this.quests.findIndex(q => q.id === questId);
+            if (questIndex === -1) return;
+
+            this.quests[questIndex].completed = true;
+            this.quests[questIndex].completedAt = new Date();
+            this.applyQuestRewards(this.quests[questIndex]);
             this.saveQuests();
             this.renderQuests();
-            this.showQuestCompleteAnimation(quest);
+            this.showQuestCompleteAnimation(this.quests[questIndex]);
         }
     }
 
@@ -324,6 +351,90 @@ class QuestPlayer {
         localStorage.setItem('questPlayerCharacter', JSON.stringify(this.character));
     }
 }
+
+// 퀘스트 필터링과 정렬을 위한 전역 변수
+let currentFilter = 'all';
+let currentSort = 'deadline';
+
+// 필터와 정렬 이벤트 리스너 추가
+document.getElementById('quest-filter-difficulty').addEventListener('change', (e) => {
+    currentFilter = e.target.value;
+    const questPlayer = new QuestPlayer();
+    questPlayer.renderQuests();
+});
+
+document.getElementById('quest-sort').addEventListener('change', (e) => {
+    currentSort = e.target.value;
+    const questPlayer = new QuestPlayer();
+    questPlayer.renderQuests();
+});
+
+// 퀘스트 편집 모달 관련 코드
+const questEditModal = document.getElementById('quest-edit-modal');
+const questEditForm = document.getElementById('quest-edit-form');
+
+function editQuest(questId) {
+    const questPlayer = new QuestPlayer();
+    const quest = questPlayer.quests.find(q => q.id === questId);
+    if (!quest) return;
+
+    // 폼 필드 채우기
+    document.getElementById('edit-quest-id').value = quest.id;
+    document.getElementById('edit-quest-title').value = quest.title;
+    document.getElementById('edit-quest-description').value = quest.description;
+    document.getElementById('edit-quest-difficulty').value = quest.difficulty;
+    document.getElementById('edit-quest-deadline').value = quest.deadline.slice(0, 16); // datetime-local 형식에 맞춤
+
+    // 모달 표시
+    questEditModal.classList.remove('hidden');
+}
+
+questEditForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const questId = document.getElementById('edit-quest-id').value;
+    const questPlayer = new QuestPlayer();
+    const questIndex = questPlayer.quests.findIndex(q => q.id === questId);
+
+    if (questIndex === -1) return;
+
+    // 퀘스트 업데이트
+    questPlayer.quests[questIndex] = {
+        ...questPlayer.quests[questIndex],
+        title: document.getElementById('edit-quest-title').value,
+        description: document.getElementById('edit-quest-description').value,
+        difficulty: document.getElementById('edit-quest-difficulty').value,
+        deadline: document.getElementById('edit-quest-deadline').value
+    };
+
+    // 로컬 스토리지 업데이트
+    questPlayer.saveQuests();
+    
+    // 모달 닫기 및 퀘스트 다시 렌더링
+    questEditModal.classList.add('hidden');
+    questPlayer.renderQuests();
+});
+
+// 퀘스트 삭제 함수
+function deleteQuest(questId) {
+    if (!confirm('정말로 이 퀘스트를 삭제하시겠습니까?')) return;
+
+    const questPlayer = new QuestPlayer();
+    questPlayer.quests = questPlayer.quests.filter(quest => quest.id !== questId);
+    questPlayer.saveQuests();
+    questPlayer.renderQuests();
+}
+
+// 모달 닫기 버튼들
+questEditModal.querySelector('.cancel').addEventListener('click', () => {
+    questEditModal.classList.add('hidden');
+});
+
+questEditModal.querySelector('.delete').addEventListener('click', () => {
+    const questId = document.getElementById('edit-quest-id').value;
+    questEditModal.classList.add('hidden');
+    deleteQuest(questId);
+});
 
 // 게임 시작
 window.onload = () => {

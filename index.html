@@ -88,6 +88,20 @@
 
             <div class="quest-board">
                 <div class="quest-controls">
+                    <div class="quest-filters">
+                        <select id="quest-filter-difficulty" class="filter-select">
+                            <option value="all">모든 난이도</option>
+                            <option value="normal">일반</option>
+                            <option value="rare">레어</option>
+                            <option value="epic">에픽</option>
+                            <option value="legendary">레전더리</option>
+                        </select>
+                        <select id="quest-sort" class="filter-select">
+                            <option value="deadline">마감일순</option>
+                            <option value="created">생성일순</option>
+                            <option value="difficulty">난이도순</option>
+                        </select>
+                    </div>
                     <button id="add-quest-btn" class="menu-button">새로운 퀘스트 +</button>
                 </div>
                 
@@ -131,6 +145,42 @@
                         </div>
                         <div class="form-buttons">
                             <button type="submit" class="menu-button">퀘스트 생성</button>
+                            <button type="button" class="menu-button cancel">취소</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- 퀘스트 편집 모달 -->
+            <div id="quest-edit-modal" class="modal hidden">
+                <div class="modal-content">
+                    <h2>퀘스트 편집</h2>
+                    <form id="quest-edit-form">
+                        <input type="hidden" id="edit-quest-id">
+                        <div class="form-group">
+                            <label for="edit-quest-title">퀘스트 제목</label>
+                            <input type="text" id="edit-quest-title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-quest-description">퀘스트 설명</label>
+                            <textarea id="edit-quest-description" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-quest-difficulty">난이도</label>
+                            <select id="edit-quest-difficulty" required>
+                                <option value="normal">일반</option>
+                                <option value="rare">레어</option>
+                                <option value="epic">에픽</option>
+                                <option value="legendary">레전더리</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-quest-deadline">마감일</label>
+                            <input type="datetime-local" id="edit-quest-deadline">
+                        </div>
+                        <div class="form-buttons">
+                            <button type="submit" class="menu-button">저장</button>
+                            <button type="button" class="menu-button delete">삭제</button>
                             <button type="button" class="menu-button cancel">취소</button>
                         </div>
                     </form>
